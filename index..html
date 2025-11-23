@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrimsonFits</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Oswald:wght@400;700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Variables based on your custom CSS */
+        :root {
+            --cf-primary: #e30425;
+            /* Crimson Red */
+            --cf-secondary: #0a0a0a;
+            /* Dark Black */
+            --cf-text-light: #f5f5f5;
+            --cf-text-dark: #1a1a1a;
+            --cf-surface-dark: #121212;
+            --cf-surface-light: #f9f9f9;
+            --cf-accent-blue: #0077b6;
+            --cf-font-heading: 'Oswald', sans-serif;
+            --cf-font-body: 'Inter', sans-serif;
+            --cf-header-height: 100px;
+            /* INCREASED HEIGHT for scroll fix: accommodates navbar + search bar */
+        }
+
+        html, body {
+            overflow-x: hidden;
+        }
+
+        /* 📏 SCROLL ANCHOR FIX 📏 */
+        /* Fixes issue where sticky header covers the section title when navigating to an anchor link (#section) */
+        section[id] {
+            scroll-margin-top: var(--cf-header-height);
+        }
+
+        /* Global Overrides */
+        h1,
+        h2,
+        h3,
+        h4,
+        .text-uppercase {
+            font-family: var(--cf-font-heading) !important;
+            letter-spacing: 1px;
+        }
+
+        .text-crimson {
+            color: var(--cf-primary) !important;
+        }
+
+        .bg-crimson-dark {
+            background-color: var(--cf-surface-dark) !important;
+        }
+
+        .btn-crimson-primary {
+            background-color: var(--cf-primary) !important;
+            border-color: var(--cf-primary) !important;
+            color: var(--cf-text-light) !important;
+            transition: transform 0.2s;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .btn-crimson-primary:hover {
+            background-color: #c9001f !important;
+            border-color: #c9001f !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-crimson-secondary {
+            background-color: transparent !important;
+            color: var(--cf-primary) !important;
+            border-color: var(--cf-primary) !important;
+            transition: transform 0.2s;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .btn-crimson-secondary:hover {
+            background-color: var(--cf-primary) !important;
+            color: var(--cf-text-light) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Header Specific Styles */
+        /* IMPORTANT: Switched to sticky-top for better flow, but scroll-margin-top still applies */
+        .navbar {
+            background-color: var(--cf-surface-dark) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand,
+        .nav-link,
+        .icon-btn {
+            color: var(--cf-text-light) !important;
+        }
+
+        .nav-link:hover,
+        .icon-btn:hover {
+            color: var(--cf-primary) !important;
+        }
+
+        .logo {
+            font-family: var(--cf-font-heading);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--cf-primary);
+            color: var(--cf-text-light);
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 50%;
+            padding: 0.1rem 0.4rem;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        #search-bar {
+            display: none;
+            background-color: var(--cf-secondary);
+            border-top: 1px solid #333;
+        }
+
+        #search-bar.active {
+            display: flex;
+        }
+
+        #search-bar input {
+            background-color: var(--cf-surface-dark);
+            color: var(--cf-text-light);
+            border: 1px solid #444;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--cf-text-light);
+            overflow: hidden;
+            /* Remove pt-5 or extra padding here if using scroll-margin-top */
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+        }
+
+        .new-drop {
+            letter-spacing: 3px;
+        }
+
+        .hero-content h1 {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-scroll-indicator {
+            color: var(--cf-text-light);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            z-index: 3;
+        }
+
+        .hero-scroll-indicator i {
+            animation: bounce 2s infinite;
+            font-size: 1.2rem;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Featured Section Custom Grid */
+        .featured-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            /* REMOVE fixed aspect-ratio from here for the Bootstrap columns to work */
+            min-height: 250px;
+            background-color: var(--cf-surface-light);
+            transition: transform 0.3s;
+        }
+
+        .featured-card a,
+        .featured-card img {
+            height: 100%;
+        }
+
+        .featured-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .featured-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            color: var(--cf-text-light);
+            transition: background-color 0.3s;
+        }
+
+        .featured-overlay h3 {
+            color: var(--cf-text-light);
+        }
+
+        .featured-overlay:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Custom Featured Grid for Large Screens (L-shape) - Mobile first default is stacking */
+        @media (min-width: 768px) {
+            .featured-grid {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                /* Tablet view */
+                gap: 1.5rem;
+            }
+
+            .featured-large {
+                /* On tablet, make the first card large and span across both rows if possible */
+                grid-row: span 2;
+                aspect-ratio: 4/5;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .featured-grid {
+                grid-template-columns: 2fr 1fr 1fr;
+                /* Desktop view: L-shape */
+            }
+        }
+
+
+        /* Product Card Styling */
+        .product-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: var(--bs-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .img-box {
+            position: relative;
+            aspect-ratio: 1/1;
+            background-color: #f0f0f0;
+        }
+
+        .img-box img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sale-badge {
+            background-color: var(--cf-primary) !important;
+        }
+
+        .new-badge {
+            background-color: var(--cf-accent-blue) !important;
+        }
+
+        .trending-badge {
+            background-color: var(--cf-secondary) !important;
+        }
+
+        .product-rating {
+            color: #ffc107;
+            font-size: 1.1rem;
+        }
+
+        .product-price del {
+            color: #999;
+            font-weight: 400;
+            font-size: 0.9rem;
+            margin-left: 8px;
+        }
+
+        .add-to-cart-btn {
+            background: var(--cf-secondary) !important;
+            color: var(--cf-text-light) !important;
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--cf-primary) !important;
+        }
+
+        /* Contact Section */
+        .contact-info {
+            background-color: var(--cf-surface-light);
+            border-radius: 8px;
+        }
+
+        .contact-info h2 {
+            color: var(--cf-primary);
+        }
+
+        .contact-item i {
+            color: var(--cf-primary);
+        }
+
+        /* Footer */
+        .main-footer {
+            background-color: var(--cf-secondary);
+            border-top: 5px solid var(--cf-primary);
+            color: var(--cf-text-light);
+        }
+
+        .main-footer h4 {
+            color: var(--cf-primary);
+        }
+
+        .main-footer a {
+            color: #ccc;
+        }
+
+        .main-footer a:hover {
+            color: var(--cf-primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#desktopNav" data-bs-smooth-scroll="true" class="bg-white">
+
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg py-3 bg-crimson-dark">
+            <div class="container-fluid container-lg">
+                <a class="logo navbar-brand fw-bold" href="/">CRIMSON<span class="crimson-text">FITS</span></a>
+
+                <div class="collapse navbar-collapse" id="desktopNav">
+                    <ul class="navbar-nav mx-auto gap-3">
+                        <li class="nav-item"><a class="nav-link fw-semibold text-uppercase" href="#home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link fw-semibold text-uppercase" href="#catalog">Catalog</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link fw-semibold text-uppercase"
+                                href="#featured">Featured</a></li>
+                        <li class="nav-item"><a class="nav-link fw-semibold text-uppercase" href="#about">About</a></li>
+                        <li class="nav-item"><a class="nav-link fw-semibold text-uppercase" href="#contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <button class="icon-btn search-btn btn p-2" id="search-btn" aria-label="Search" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <a href="#account" class="icon-btn btn p-2" aria-label="Account">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <a href="#cart" class="icon-btn btn p-2 position-relative" aria-label="Cart">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="search-bar" id="search-bar">
+            <div class="container-fluid container-lg d-flex py-3">
+                <input type="text" placeholder="Search products..." class="form-control me-2">
+                <button class="btn btn-crimson-primary flex-shrink-0"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <div class="offcanvas offcanvas-end bg-crimson-dark" tabindex="-1" id="offcanvasNavbar"
+            aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title logo text-light" id="offcanvasNavbarLabel">CRIMSON<span
+                        class="crimson-text">FITS</span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 text-center">
+                    <li class="nav-item"><a class="nav-link fs-5 text-uppercase py-3" href="#home"
+                            data-bs-dismiss="offcanvas">Home</a></li>
+                    <li class="nav-item"><a class="nav-link fs-5 text-uppercase py-3" href="#catalog"
+                            data-bs-dismiss="offcanvas">Catalog</a></li>
+                    <li class="nav-item"><a class="nav-link fs-5 text-uppercase py-3" href="#featured"
+                            data-bs-dismiss="offcanvas">Featured</a></li>
+                    <li class="nav-item"><a class="nav-link fs-5 text-uppercase py-3" href="#about"
+                            data-bs-dismiss="offcanvas">About</a></li>
+                    <li class="nav-item"><a class="nav-link fs-5 text-uppercase py-3" href="#contact"
+                            data-bs-dismiss="offcanvas">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section" aria-labelledby="hero-title">
+            <div class="hero-background">
+                <img src="img/sample.png" alt="Anime Streetwear Hero Background" class="hero-video">
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content container py-5">
+                <p class="new-drop text-crimson fw-bold mb-3">🔥 NEW DROP: WINTER COLLECTION '25</p>
+                <h1 id="hero-title" class="display-4 display-md-2 fw-bolder mb-4">Anime Energy Meets Modern Street
+                    Culture</h1>
+                <p class="sub-text lead mb-5">Discover premium anime-inspired streetwear with impeccable design and
+                    quality.</p>
+                <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                    <a href="#catalog" class="btn btn-lg btn-crimson-primary"><i class="fas fa-shopping-bag"></i> SHOP
+                        NOW</a>
+                    <a href="#about" class="btn btn-lg btn-crimson-secondary"><i class="fas fa-info-circle"></i> LEARN
+                        MORE</a>
+                </div>
+            </div>
+            <!-- <div class="hero-scroll-indicator position-absolute bottom-0 mb-3">
+                <span>SCROLL</span>
+                <i class="fas fa-chevron-down d-block"></i>
+            </div> -->
+        </section>
+
+        <section id="featured" class="py-5 py-lg-6">
+            <div class="container container-lg">
+                <div class="text-center mb-5">
+                    <h2 id="featured-title" class="fs-1 fw-bolder text-dark">✨ FEATURED COLLECTION</h2>
+                    <p class="text-secondary fw-semibold">Handpicked favorites from our latest drops</p>
+                </div>
+
+                <div class="row g-4 featured-grid-wrapper">
+
+                    <div class="col-12 col-md-6 col-lg-4 featured-large">
+                        <div class="featured-card h-100">
+                            <a href="#catalog" class="text-decoration-none">
+                                <img src="img/sample.png" alt="New Arrivals collection link"
+                                    class="w-100 h-100 object-fit-cover">
+                                <div class="featured-overlay">
+                                    <h3 class="fw-bolder fs-3">New Arrivals</h3>
+                                    <p class="mb-3">Fresh styles, bold designs</p>
+                                    <span class="btn btn-sm btn-crimson-primary">Explore</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="featured-card h-100">
+                            <a href="#catalog" class="text-decoration-none">
+                                <img src="img/sample.png" alt="Hoodies Collection link"
+                                    class="w-100 h-100 object-fit-cover">
+                                <div class="featured-overlay">
+                                    <h3 class="fw-bolder fs-4">Hoodies</h3>
+                                    <p class="mb-3">Comfort meets style</p>
+                                    <span class="btn btn-sm btn-crimson-primary">Shop</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="featured-card h-100">
+                            <a href="#catalog" class="text-decoration-none">
+                                <img src="img/sample.png" alt="Accessories collection link"
+                                    class="w-100 h-100 object-fit-cover">
+                                <div class="featured-overlay">
+                                    <h3 class="fw-bolder fs-4">Accessories</h3>
+                                    <p class="mb-3">Complete your look</p>
+                                    <span class="btn btn-sm btn-crimson-primary">Discover</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="catalog" class="py-5 bg-cf-surface-light">
+            <div class="container container-lg">
+                <div class="text-center mb-5">
+                    <h2 id="bestsellers-title" class="fs-1 fw-bolder text-dark">🔥 BEST SELLERS</h2>
+                    <p class="text-secondary fw-semibold">Most loved by our community</p>
+                </div>
+
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+
+                    <div class="col">
+                        <div class="card product-card h-100 shadow-sm border-0">
+                            <div class="img-box">
+                                <span class="badge sale-badge position-absolute top-0 start-0 m-3 p-2 fw-bold">SALE
+                                    -15%</span>
+                                <img src="img/sample.png" class="card-img-top" alt="Premium Black Hoodie">
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="product-title fw-bold text-uppercase mb-1">PREMIUM BLACK HOODIE</div>
+                                <p class="product-desc card-text text-muted small mb-2">Premium quality hoodie</p>
+                                <div class="product-rating mb-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                        class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                    <span class="text-muted small">(124 reviews)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center fw-bold mb-2">
+                                    <div class="product-label">COLORS</div>
+                                    <div class="product-price">Rs.2,699 <del class="text-muted fw-normal">Rs.3,199</del>
+                                    </div>
+                                </div>
+                                <div class="product-colors fs-5 mb-2">
+                                    <i class="fas fa-circle" style="color:#000;"></i>
+                                    <i class="fas fa-circle" style="color:#333;"></i>
+                                    <i class="fas fa-circle" style="color:#666;"></i>
+                                </div>
+                                <div class="d-flex justify-content-center pt-2">
+                                    <button class="btn add-to-cart-btn btn-sm w-100"><i class="fas fa-shopping-bag"></i>
+                                        Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card product-card h-100 shadow-sm border-0">
+                            <div class="img-box">
+                                <span class="badge new-badge position-absolute top-0 start-0 m-3 p-2 fw-bold">NEW</span>
+                                <img src="img/sample.png" class="card-img-top" alt="Anime Art Hoodie">
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="product-title fw-bold text-uppercase mb-1">ANIME ART HOODIE</div>
+                                <p class="product-desc card-text text-muted small mb-2">Unique anime-inspired artwork
+                                    design</p>
+                                <div class="product-rating mb-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                        class="fas fa-star"></i><i class="fas fa-star"></i>
+                                    <span class="text-muted small">(98 reviews)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center fw-bold mb-2">
+                                    <div class="product-label">COLORS</div>
+                                    <div class="product-price">Rs.3,199</div>
+                                </div>
+                                <div class="product-colors fs-5 mb-2">
+                                    <i class="fas fa-circle" style="color:#e30425;"></i>
+                                    <i class="fas fa-circle" style="color:#0a0a0a;"></i>
+                                    <i class="fas fa-circle text-light border border-dark rounded-circle"></i>
+                                </div>
+                                <div class="d-flex justify-content-center pt-2">
+                                    <button class="btn add-to-cart-btn btn-sm w-100"><i class="fas fa-shopping-bag"></i>
+                                        Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card product-card h-100 shadow-sm border-0">
+                            <div class="img-box">
+                                <span class="badge sale-badge position-absolute top-0 start-0 m-3 p-2 fw-bold">SALE
+                                    -20%</span>
+                                <img src="img/sample.png" class="card-img-top" alt="Classic Streetwear Tee">
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="product-title fw-bold text-uppercase mb-1">CLASSIC STREETWEAR TEE</div>
+                                <p class="product-desc card-text text-muted small mb-2">Timeless streetwear tee for
+                                    everyday style</p>
+                                <div class="product-rating mb-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                        class="fas fa-star"></i><i class="far fa-star"></i>
+                                    <span class="text-muted small">(156 reviews)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center fw-bold mb-2">
+                                    <div class="product-label">COLORS</div>
+                                    <div class="product-price">Rs.1,599 <del class="text-muted fw-normal">Rs.1,999</del>
+                                    </div>
+                                </div>
+                                <div class="product-colors fs-5 mb-2">
+                                    <i class="fas fa-circle" style="color:#FFD700;"></i>
+                                    <i class="fas fa-circle" style="color:#FF6347;"></i>
+                                    <i class="fas fa-circle" style="color:#0077B6;"></i>
+                                </div>
+                                <div class="d-flex justify-content-center pt-2">
+                                    <button class="btn add-to-cart-btn btn-sm w-100"><i class="fas fa-shopping-bag"></i>
+                                        Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card product-card h-100 shadow-sm border-0">
+                            <div class="img-box">
+                                <span
+                                    class="badge trending-badge position-absolute top-0 start-0 m-3 p-2 fw-bold">TRENDING</span>
+                                <img src="img/sample.png" class="card-img-top" alt="Limited Edition Cap">
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="product-title fw-bold text-uppercase mb-1">LIMITED EDITION CAP</div>
+                                <p class="product-desc card-text text-muted small mb-2">Exclusive limited edition street
+                                    cap</p>
+                                <div class="product-rating mb-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                        class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                    <span class="text-muted small">(87 reviews)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center fw-bold mb-2">
+                                    <div class="product-label">COLORS</div>
+                                    <div class="product-price">Rs.1,299</div>
+                                </div>
+                                <div class="product-colors fs-5 mb-2">
+                                    <i class="fas fa-circle" style="color:#FFD700;"></i>
+                                    <i class="fas fa-circle" style="color:#FF6347;"></i>
+                                    <i class="fas fa-circle" style="color:#0077B6;"></i>
+                                </div>
+                                <div class="d-flex justify-content-center pt-2">
+                                    <button class="btn add-to-cart-btn btn-sm w-100"><i class="fas fa-shopping-bag"></i>
+                                        Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5">
+                    <a href="#catalog" class="btn btn-lg btn-crimson-secondary">VIEW ALL PRODUCTS</a>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section class="py-5 bg-white">
+            <div class="container container-lg">
+                <h2 id="features-title" class="visually-hidden">Why Choose CrimsonFits</h2>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 text-center">
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="feature-icon mx-auto rounded-circle bg-cf-surface-light mb-3 d-flex align-items-center justify-content-center"
+                                style="width:60px; height:60px;">
+                                <i class="fas fa-truck fa-2x text-crimson" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="fs-5 fw-bold text-uppercase">FAST SHIPPING</h3>
+                            <p class="text-muted small">Free shipping on all orders. Delivered across Pakistan within
+                                3-5 business days.</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="feature-icon mx-auto rounded-circle bg-cf-surface-light mb-3 d-flex align-items-center justify-content-center"
+                                style="width:60px; height:60px;">
+                                <i class="fas fa-undo fa-2x text-crimson" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="fs-5 fw-bold text-uppercase">EASY RETURNS</h3>
+                            <p class="text-muted small">30-day return policy. Return item(s) if unused, unwashed, and in
+                                original condition.</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="feature-icon mx-auto rounded-circle bg-cf-surface-light mb-3 d-flex align-items-center justify-content-center"
+                                style="width:60px; height:60px;">
+                                <i class="fas fa-headset fa-2x text-crimson" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="fs-5 fw-bold text-uppercase">24/7 SUPPORT</h3>
+                            <p class="text-muted small">Quick and friendly customer support. Get sizing advice and order
+                                updates anytime.</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3">
+                            <div class="feature-icon mx-auto rounded-circle bg-cf-surface-light mb-3 d-flex align-items-center justify-content-center"
+                                style="width:60px; height:60px;">
+                                <i class="fas fa-lock fa-2x text-crimson" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="fs-5 fw-bold text-uppercase">SECURE PAYMENT</h3>
+                            <p class="text-muted small">Your payment is encrypted and secure. We accept all major
+                                payment methods.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section class="py-5 bg-cf-surface-dark text-light text-center">
+            <div class="container container-lg">
+                <div class="newsletter-content mx-auto" style="max-width: 700px;">
+                    <h2 class="fs-2 fw-bolder text-crimson mb-3">📧 STAY IN THE LOOP</h2>
+                    <p class="mb-4">Get exclusive deals, early access to new drops, and insider tips straight to your
+                        inbox.</p>
+                    <form class="newsletter-form d-flex flex-column flex-md-row gap-3">
+                        <input type="email" placeholder="Enter your email address"
+                            aria-label="Enter your email address for subscription" class="form-control" required>
+                        <button type="submit" class="btn btn-crimson-primary flex-shrink-0">SUBSCRIBE NOW</button>
+                    </form>
+                    <p class="newsletter-disclaimer small mt-3 text-muted">We'll never spam you. Unsubscribe anytime.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="about" class="py-5">
+            <div class="container container-lg">
+                <div class="row about-content g-5 align-items-center flex-column flex-lg-row">
+                    <div class="col-lg-6 order-lg-1">
+                        <div class="about-text">
+                            <h2 id="about-title" class="fs-1 fw-bolder text-dark mb-4">ABOUT CRIMSONFIT</h2>
+                            <p class="mb-4">We're not just another clothing brand. We're a community of anime
+                                enthusiasts, streetwear lovers, and creative individuals who believe that fashion is a
+                                form of self-expression.</p>
+                            <p class="mb-5">Every piece in our collection is carefully curated to blend anime culture
+                                with modern street aesthetics. We're committed to quality, originality, and delivering
+                                products that make you feel confident and inspired.</p>
+                            <div
+                                class="about-stats d-flex justify-content-between gap-3 pt-4 border-top border-2 border-light-subtle">
+                                <div class="stat text-center">
+                                    <h4 class="text-crimson fs-2 fw-bolder">50K+</h4>
+                                    <p class="small text-uppercase mb-0">Happy Customers</p>
+                                </div>
+                                <div class="stat text-center">
+                                    <h4 class="text-crimson fs-2 fw-bolder">200+</h4>
+                                    <p class="small text-uppercase mb-0">Unique Designs</p>
+                                </div>
+                                <div class="stat text-center">
+                                    <h4 class="text-crimson fs-2 fw-bolder">4.8★</h4>
+                                    <p class="small text-uppercase mb-0">Customer Rating</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 order-lg-2">
+                        <div class="about-image">
+                            <img src="img/sample.png" alt="A modern minimalist clothing studio with garments hanging"
+                                loading="lazy" class="img-fluid rounded shadow-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section class="py-5 bg-cf-surface-light">
+            <div class="container container-lg">
+                <div class="text-center mb-5">
+                    <h2 id="testimonials-title" class="fs-1 fw-bolder text-dark">💬 CUSTOMER LOVE</h2>
+                </div>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div class="card testimonial-card h-100 p-4 border-0 shadow-sm text-center">
+                            <div class="testimonial-rating text-warning mb-2">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                    class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <blockquote class="testimonial-text fst-italic mb-3 text-secondary">"The quality is amazing!
+                                Exactly what I expected and the fit is perfect. Will definitely order again."
+                            </blockquote>
+                            <p class="testimonial-author fw-bold text-crimson text-uppercase small">- Ahmed K.</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card testimonial-card h-100 p-4 border-0 shadow-sm text-center">
+                            <div class="testimonial-rating text-warning mb-2">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                    class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <blockquote class="testimonial-text fst-italic mb-3 text-secondary">"Love the designs! The
+                                anime references are perfect for someone like me. Shipping was super fast too!"
+                            </blockquote>
+                            <p class="testimonial-author fw-bold text-crimson text-uppercase small">- Hassan R.</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card testimonial-card h-100 p-4 border-0 shadow-sm text-center">
+                            <div class="testimonial-rating text-warning mb-2">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                    class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <blockquote class="testimonial-text fst-italic mb-3 text-secondary">"Great customer service
+                                and very comfortable hoodies. Highly recommend to all anime fans!"</blockquote>
+                            <p class="testimonial-author fw-bold text-crimson text-uppercase small">- Imran S.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="contact" class="py-5">
+            <div class="container container-lg">
+                <div class="row contact-container g-4">
+                    <div class="col-lg-6">
+                        <div class="p-4 contact-info h-100">
+                            <h2 id="contact-title" class="fs-1 fw-bolder mb-3">GET IN TOUCH</h2>
+                            <p class="mb-4 text-secondary">Have questions? We'd love to hear from you. Send us a message
+                                and we'll respond as soon as possible.</p>
+
+                            <ul class="list-unstyled contact-details mb-5">
+                                <li class="d-flex align-items-start gap-3 mb-4">
+                                    <i class="fas fa-map-marker-alt fs-4 flex-shrink-0 pt-1" aria-hidden="true"></i>
+                                    <div>
+                                        <h4 class="fs-6 fw-bold mb-0">Address</h4>
+                                        <address class="mb-0 text-muted small">Karachi, Pakistan</address>
+                                    </div>
+                                </li>
+                                <li class="d-flex align-items-start gap-3 mb-4">
+                                    <i class="fas fa-phone fs-4 flex-shrink-0 pt-1" aria-hidden="true"></i>
+                                    <div>
+                                        <h4 class="fs-6 fw-bold mb-0">Phone</h4>
+                                        <p class="mb-0 text-muted small"><a href="tel:+923001234567"
+                                                class="text-decoration-none text-muted">+92 (300) 1234567</a></p>
+                                    </div>
+                                </li>
+                                <li class="d-flex align-items-start gap-3 mb-4">
+                                    <i class="fas fa-envelope fs-4 flex-shrink-0 pt-1" aria-hidden="true"></i>
+                                    <div>
+                                        <h4 class="fs-6 fw-bold mb-0">Email</h4>
+                                        <p class="mb-0 text-muted small"><a href="mailto:hello@crimsonfit.com"
+                                                class="text-decoration-none text-muted">hello@crimsonfit.com</a></p>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="social-links d-flex gap-3">
+                                <a href="#" class="social-btn" aria-label="Follow us on Instagram"><i
+                                        class="fab fa-instagram fs-4"></i></a>
+                                <a href="#" class="social-btn" aria-label="Follow us on Twitter"><i
+                                        class="fab fa-twitter fs-4"></i></a>
+                                <a href="#" class="social-btn" aria-label="Follow us on Facebook"><i
+                                        class="fab fa-facebook fs-4"></i></a>
+                                <a href="#" class="social-btn" aria-label="Follow us on TikTok"><i
+                                        class="fab fa-tiktok fs-4"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <form class="p-4 border rounded shadow-sm contact-form h-100 bg-white">
+                            <div class="mb-3">
+                                <input type="text" placeholder="Your Name" class="form-control" required
+                                    aria-label="Your Name">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" placeholder="Your Email" class="form-control" required
+                                    aria-label="Your Email">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" placeholder="Subject" class="form-control" required
+                                    aria-label="Subject">
+                            </div>
+                            <div class="mb-4">
+                                <textarea placeholder="Your Message" rows="5" class="form-control" required
+                                    aria-label="Your Message"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-crimson-primary w-100">SEND MESSAGE</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    
+
+    <footer class="main-footer pt-5">
+        <div class="container container-lg">
+            <div class="row footer-content g-4 pb-5 row-cols-md-2 row-cols-lg-4">
+                <div class="col footer-section">
+                    <h4 class="fw-bolder mb-3">ABOUT CRIMSONFIT</h4>
+                    <p class="small text-light-50">Premium anime-inspired streetwear for passionate fans and fashion
+                        enthusiasts.</p>
+                </div>
+                <div class="col footer-section">
+                    <h4 class="fw-bolder mb-3">QUICK LINKS</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="#home" class="text-decoration-none small">Home</a></li>
+                        <li><a href="#catalog" class="text-decoration-none small">Shop</a></li>
+                        <li><a href="#about" class="text-decoration-none small">About</a></li>
+                        <li><a href="#contact" class="text-decoration-none small">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col footer-section">
+                    <h4 class="fw-bolder mb-3">POLICIES</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none small">Shipping Policy</a></li>
+                        <li><a href="#" class="text-decoration-none small">Return Policy</a></li>
+                        <li><a href="#" class="text-decoration-none small">Privacy Policy</a></li>
+                        <li><a href="#" class="text-decoration-none small">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col footer-section">
+                    <h4 class="fw-bolder mb-3">FOLLOW US</h4>
+                    <div class="footer-social d-flex gap-3">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram fs-4"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter fs-4"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook fs-4"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok fs-4"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom text-center py-3">
+                <p class="mb-0 small text-light-50">&copy; 2025 CRIMSONFIT. All Rights Reserved. | Designed with ❤️ for
+                    anime fans</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script>
+        // Custom JS to handle the Search Bar toggle
+        document.getElementById('search-btn').addEventListener('click', function () {
+            document.getElementById('search-bar').classList.toggle('active');
+        });
+
+        // Close mobile menu (offcanvas) when a link is clicked
+        var offcanvasLinks = document.querySelectorAll('#offcanvasNavbar .nav-link');
+        var offcanvasElement = document.getElementById('offcanvasNavbar');
+        var offcanvas = bootstrap.Offcanvas.getOrCreateInstance(offcanvasElement);
+
+        offcanvasLinks.forEach(function (link) {
+            link.addEventListener('click', function () {
+                offcanvas.hide();
+            });
+        });
+    </script>
+</body>
+
+</html>
