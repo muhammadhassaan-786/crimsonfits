@@ -1,40 +1,315 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CrimsonFits</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Oswald:wght@400;700&family=Inter:wght@400;600;700&display=swap"
-        rel="stylesheet">
+    <title>Faisal Hayat & Associates | Premier Legal Counsel</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        /* Variables based on your custom CSS */
-        :root {
-            --cf-primary: #e30425;
-            /* Crimson Red */
-            --cf-secondary: #0a0a0a;
-            /* Dark Black */
-            --cf-text-light: #f5f5f5;
-            --cf-text-dark: #1a1a1a;
-            --cf-surface-dark: #121212;
-            --cf-surface-light: #f9f9f9;
-            --cf-accent-blue: #0077b6;
-            --cf-font-heading: 'Oswald', sans-serif;
-            --cf-font-body: 'Inter', sans-serif;
-            /* --cf-header-height: 140px; */
-            /* INCREASED HEIGHT for scroll fix: accommodates navbar + search bar */
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#d4af37',
+                            500: '#c5a059', 
+                            600: '#b08d4b',
+                            700: '#8a6d3b',
+                        },
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    backgroundImage: {
+                        // Changed to abstract columns/architecture (No people)
+                        'hero-pattern': "linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1464059780740-f5210db27067?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
+                    }
+                }
+            }
         }
+    </script>
 
-        html, body {
-            overflow-x: hidden;
+    <style>
+        /* Custom Styles for Animation */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
         }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Gold Underline Effect */
+        .hover-underline-animation {
+            display: inline-block;
+            position: relative;
+        }
+        .hover-underline-animation::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #c5a059;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .hover-underline-animation:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-700 antialiased bg-gray-50">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="font-serif text-2xl font-bold text-white tracking-wide">
+                        FAISAL HAYAT <span class="text-gold-500">& ASSOC.</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-gray-300 hover:text-gold-500 font-medium transition text-sm uppercase tracking-wider">Home</a>
+                    <a href="#about" class="text-gray-300 hover:text-gold-500 font-medium transition text-sm uppercase tracking-wider">The Firm</a>
+                    <a href="#expertise" class="text-gray-300 hover:text-gold-500 font-medium transition text-sm uppercase tracking-wider">Expertise</a>
+                    <a href="#team" class="text-gray-300 hover:text-gold-500 font-medium transition text-sm uppercase tracking-wider">Attorneys</a>
+                    <a href="#contact" class="bg-gold-500 hover:bg-gold-600 text-white px-6 py-2.5 rounded-sm font-semibold transition duration-300 shadow-lg">
+                        Book Consultation
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white hover:text-gold-500 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-navy-900 absolute w-full top-full left-0 border-t border-gray-800">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="#home" class="block px-3 py-3 text-base font-medium text-white hover:text-gold-500">Home</a>
+                <a href="#about" class="block px-3 py-3 text-base font-medium text-white hover:text-gold-500">The Firm</a>
+                <a href="#expertise" class="block px-3 py-3 text-base font-medium text-white hover:text-gold-500">Expertise</a>
+                <a href="#team" class="block px-3 py-3 text-base font-medium text-white hover:text-gold-500">Attorneys</a>
+                <a href="#contact" class="block px-3 py-3 text-base font-medium text-gold-500">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen bg-hero-pattern bg-cover bg-center bg-fixed bg-no-repeat flex items-center justify-center">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
+            <span class="block text-gold-500 font-semibold tracking-[0.2em] uppercase mb-4 reveal-on-scroll">Islamabad • Lahore • Dubai</span>
+            <h1 class="font-serif text-5xl md:text-7xl font-bold text-white mb-6 leading-tight reveal-on-scroll" style="transition-delay: 100ms;">
+                Protecting Your Legacy.<br>Securing Your Future.
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-300 font-light reveal-on-scroll" style="transition-delay: 200ms;">
+                Elite legal counsel for high-net-worth individuals, families, and corporations. We handle complexity with discretion and precision.
+            </p>
+            <div class="mt-10 flex justify-center gap-4 reveal-on-scroll" style="transition-delay: 300ms;">
+                <a href="#expertise" class="border border-white text-white px-8 py-3.5 hover:bg-white hover:text-navy-900 transition duration-300 font-semibold rounded-sm">
+                    Our Practice Areas
+                </a>
+                <a href="#contact" class="bg-gold-500 text-white px-8 py-3.5 hover:bg-gold-600 transition duration-300 font-semibold rounded-sm shadow-lg border border-gold-500">
+                    Get in Touch
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-white opacity-70 hover:opacity-100 transition">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <div class="bg-navy-950 py-10 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="reveal-on-scroll">
+                    <p class="text-4xl font-serif font-bold text-gold-500">25+</p>
+                    <p class="text-gray-400 text-sm uppercase tracking-wider mt-2">Years Experience</p>
+                </div>
+                <div class="reveal-on-scroll" style="transition-delay: 100ms;">
+                    <p class="text-4xl font-serif font-bold text-gold-500">PKR 50B+</p>
+                    <p class="text-gray-400 text-sm uppercase tracking-wider mt-2">Asset Value Protected</p>
+                </div>
+                <div class="reveal-on-scroll" style="transition-delay: 200ms;">
+                    <p class="text-4xl font-serif font-bold text-gold-500">400+</p>
+                    <p class="text-gray-400 text-sm uppercase tracking-wider mt-2">Corporate Clients</p>
+                </div>
+                <div class="reveal-on-scroll" style="transition-delay: 300ms;">
+                    <p class="text-4xl font-serif font-bold text-gold-500">100%</p>
+                    <p class="text-gray-400 text-sm uppercase tracking-wider mt-2">Client Confidentiality</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="relative reveal-on-scroll">
+                    <div class="absolute -top-4 -left-4 w-24 h-24 bg-gold-100 rounded-tl-3xl -z-10"></div>
+                    <!-- Image of empty high-end meeting room (No people) -->
+                    <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1632&q=80" alt="Law Office Meeting Room" class="rounded shadow-xl w-full object-cover h-[500px]">
+                    <div class="absolute -bottom-6 -right-6 bg-navy-900 text-white p-8 rounded shadow-2xl max-w-xs hidden lg:block">
+                        <p class="font-serif italic text-lg leading-relaxed">"Justice is not just a destination; it is a meticulous process."</p>
+                        <p class="mt-4 text-gold-500 font-bold">— Faisal Hayat</p>
+                    </div>
+                </div>
+                <div class="reveal-on-scroll">
+                    <h2 class="text-gold-600 font-semibold tracking-wide uppercase mb-2">About The Firm</h2>
+                    <h3 class="text-4xl md:text-5xl font-serif font-bold text-navy-900 mb-6">Unwavering Commitment to Your Interests</h3>
+                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+                        Based in the heart of Islamabad, Faisal Hayat & Associates is a boutique law firm dedicated to solving the most complex legal challenges faced by families, businesses, and high-net-worth individuals.
+                    </p>
+                    <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+                        We step away from the "volume" model of traditional firms. Instead, we offer bespoke legal strategies. Whether you are navigating a high-stakes corporate merger, a delicate family matter, or protecting your estate, our team provides the aggression of a litigator and the wisdom of a counselor.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-navy-800 font-medium">
+                            <i class="fas fa-check text-gold-500 mr-3"></i> Supreme Court & High Court Representation
+                        </li>
+                        <li class="flex items-center text-navy-800 font-medium">
+                            <i class="fas fa-check text-gold-500 mr-3"></i> Cross-Border & International Law Expertise
+                        </li>
+                        <li class="flex items-center text-navy-800 font-medium">
+                            <i class="fas fa-check text-gold-500 mr-3"></i> Sharia & Civil Law Integration
+                        </li>
+                    </ul>
+                    <a href="#team" class="text-navy-900 font-bold hover:text-gold-600 transition hover-underline-animation">Meet Our Partners <i class="fas fa-arrow-right ml-2 text-sm"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise Section -->
+    <section id="expertise" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+                <h2 class="text-gold-600 font-semibold tracking-wide uppercase mb-2">Practice Areas</h2>
+                <h3 class="text-4xl font-serif font-bold text-navy-900">Comprehensive Legal Solutions</h3>
+                <div class="w-20 h-1 bg-gold-500 mx-auto mt-6"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white p-8 rounded shadow-sm hover:shadow-xl transition-all duration-300 border-t-4 border-transparent hover:border-gold-500 group reveal-on-scroll">
+                    <div class="w-14 h-14 bg-navy-50 text-navy-900 rounded-full flex items-center justify-center text-2xl mb-6 group-hover:bg-navy-900 group-hover:text-white transition-colors">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h4 class="text-xl font-serif font-bold text-navy-900 mb-4">Corporate & Commercial</h4>
+                    <p class="text-gray-600 mb-4">Handling mergers, acquisitions, regulatory compliance (SECP), and contract disputes for Pakistan's leading enterprises.</p>
+                    <a href="#" class="text-gold-600 font-semibold text-sm uppercase tracking-wide group-hover:text-gold-700">Learn More</a>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-8 rounded shadow-sm hover:shadow-xl transition-all duration-300 border-t-4 border-transparent hover:border-gold-500 group reveal-on-scroll" style="transition-delay: 100ms;">
+                    <div class="w-14 h-14 bg-navy-50 text-navy-900 rounded-full flex items-center justify-center text-2xl mb-6 group-hover:bg-navy-900 group-hover:text-white transition-colors">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4 class="text-xl font-serif font-bold text-navy-900 mb-4">Family & Inheritance</h4>
+                    <p class="text-gray-600 mb-4">Discreet resolution of divorce, custody, and complex inheritance distribution under Islamic and Civil law.</p>
+                    <a href="#" class="text-gold-600 font-semibold text-sm uppercase tracking-wide group-hover:text-gold-700">Learn More</a>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-8 rounded shadow-sm hover:shadow-xl transition-all duration-300 border-t-4 border-transparent hover:border-gold-500 group reveal-on-scroll" style="transition-delay: 200ms;">
+                    <div class="w-14 h-14 bg-navy-50 text-navy-900 rounded-full flex items-center justify-center text-2xl mb-6 group-hover:bg-navy-900 group-hover:text-white transition-colors">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h4 class="text-xl font-serif font-bold text-navy-900 mb-4">Real Estate & Property</h4>
+                    <p class="text-gray-600 mb-4">Title verification, land disputes, and high-value transactional support for commercial and residential sectors.</p>
+                    <a href="#" class="text-gold-600 font-semibold text-sm uppercase tracking-wide group-hover:text-gold-700">Learn More</a>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white p-8 rounded shadow-sm hover:shadow-xl transition-all duration-300 border-t-4 border-transparent hover:border-gold-500 group reveal-on-scroll">
+                    <div class="w-14 h-14 bg-navy-50 text-navy-900 rounded-full flex items-center justify-center text-2xl mb-6 group-hover:bg-navy-900 group-hover:text-white transition-colors">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <h4 class="text-xl font-serif font-bold text-navy-900 mb-4">White Collar Defense</h4>
+                    <p class="text-gray-600 mb-4">Defense against financial allegations, NAB inquiries, and corporate fraud with absolute confidentiality.</p>
+                    <a href="#" class="text-gold-600 font-semibold text-sm uppercase tracking-wide group-hover:text-gold-700">Learn More</a>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="bg-white p-8 rounded shadow-sm hover:shadow-xl transition-all duration-300 border-t-4 border-transparent hover:border-gold-500 group reveal-on-scroll" style="transition-delay: 100ms;">
+                    <div class="w-14 h-14 bg-navy-50 text-navy-900 rounded-full flex items-center justify-center text-2xl mb-6 group-hover:bg-navy-900 group-hover:text-white transition-colors">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h4 class="text-xl font-serif font-bold text-navy-900 mb-4">Taxation & Banking</h4>
+                    <p class="text-gray-600 mb-4">Advising on tax liabilities, banking court litigation, and financial restructuring for businesses.</p>
+                    <a href="#" class="text-gold-600 font-semibold text-sm uppercase tracking-wide group-hover:text-gold-700">Learn More</a>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="bg-white p-8 rounded shadow-sm hover:shadow-xl transition-all duration-300 border-t-4 border-transparent hover:border-gold-500 group reveal-on-scroll" style="transition-delay: 200ms;">
+                    <div class="w-14 h-14 bg-navy-50 text-navy-900 rounded-full flex items-center justify-center text-2xl mb-6 group-hover:bg-navy-900 group-hover:text-white transition-colors">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h4 class="text-xl font-serif font-bold text-navy-900 mb-4">Immigration & Overseas</h4>
+                    <p class="text-gray-600 mb-4">Assisting Overseas Pakistanis with local legal matters and business investments in Pakistan.</p>
+                    <a href="#" class="text-gold-600 font-semibold text-sm uppercase tracking-wide group-hover:text-gold-700">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal-on-scroll">
+                <div class="max-w-2xl">
+                    <h2 class="text-gold-600 font-semibold tracking-wide uppercase mb-2">Our Attorneys</h2>
+                    <h3 class="text-4xl font-serif font-bold text-navy-900">Experience You Can Trust</h3>
+                </div>
+                <div class="hidden md:block">
+                    <a href="#" class="inline-flex items-center font-semibold text-navy-900 hover:text-gold-600 transition">View All Team <i class="fas fa-arrow-right ml-2"></i></a>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-10">
+                <!-- Team Member 1 -->
+                <div class="group reveal-on-scroll">
+                    <div class="relative overflow-hidden rounded-sm mb-6 h-96">
+                        <!-- Male Image, Full Suit -->
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Faisal Hayat" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-navy-900 to-transparent opacity-60"></div>
+                        <div class="absolute bottom-0 left-0 p-6 te        }
 
         /* 📏 SCROLL ANCHOR FIX 📏 */
         /* Fixes issue where sticky header covers the section title when navigating to an anchor link (#section) */
